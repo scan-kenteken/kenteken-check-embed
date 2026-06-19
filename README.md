@@ -2,6 +2,8 @@
 
 Lightweight embed widget for inline kentekenchecks on any website. A vanilla TypeScript custom element with Shadow DOM — no framework, iframe, or scanner required.
 
+**Configure fields, theme, and copy embed code:** [scankenteken.nl/kenteken-check-embed](https://www.scankenteken.nl/kenteken-check-embed)
+
 <p align="center">
   <img src="assets/demo.gif" alt="Kenteken Check widget — type a Dutch plate and see vehicle details inline" width="380" />
 </p>
@@ -43,9 +45,11 @@ npm run build
 npm run serve
 ```
 
-Open the configurator to preview and copy embed code:
+Open the live configurator to preview and copy embed code:
 
-- http://localhost:3000/configurator/
+- https://www.scankenteken.nl/kenteken-check-embed
+
+For local development, the same configurator is available at http://localhost:3000/configurator/ after `npm run serve`.
 
 Watch mode:
 
