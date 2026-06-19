@@ -68,6 +68,7 @@ jobs:
         run: pip install fonttools brotli
 
       - name: Publish to npm
+        continue-on-error: true
         run: |
           npm ci
           NAME="$(node -p "require('./package.json').name")"
