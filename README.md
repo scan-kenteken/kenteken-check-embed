@@ -2,6 +2,10 @@
 
 Lightweight embed widget for inline kentekenchecks on any website. A vanilla TypeScript custom element with Shadow DOM — no framework, iframe, or scanner required.
 
+<p align="center">
+  <img src="assets/demo.gif" alt="Kenteken Check widget — type a Dutch plate and see vehicle details inline" width="380" />
+</p>
+
 ## Embed
 
 ```html
