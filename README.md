@@ -37,6 +37,36 @@ Pre-filled, dark theme:
 <kenteken-check plate="RJ-123-X" theme="dark"></kenteken-check>
 ```
 
+## ESM module
+
+For bundlers (Vite, Next.js, etc.) or a module script on the page:
+
+```js
+import { defineKentekenCheck } from 'kenteken-check-embed'
+
+defineKentekenCheck()
+```
+
+```html
+<kenteken-check fields="brand,apk,link"></kenteken-check>
+```
+
+CDN module import (no bundler):
+
+```html
+<script type="module">
+  import { defineKentekenCheck } from 'https://cdn.scankenteken.nl/kenteken-check/v1/index.js'
+  defineKentekenCheck()
+</script>
+<kenteken-check></kenteken-check>
+```
+
+The classic script tag embed (`embed.js`) still works and auto-registers the element:
+
+```html
+<script async src="https://cdn.scankenteken.nl/kenteken-check/v1/embed.js"></script>
+```
+
 ## Local development
 
 ```sh

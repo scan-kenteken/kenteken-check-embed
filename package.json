@@ -22,9 +22,16 @@
   "engines": {
     "node": ">=18"
   },
-  "main": "./dist/embed.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
   "exports": {
-    ".": "./dist/embed.js",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./embed": "./dist/embed.js",
     "./embed.js": "./dist/embed.js",
     "./kenteken.woff2": "./dist/kenteken.woff2"
   },
@@ -34,6 +41,8 @@
     "./dist/embed.js"
   ],
   "files": [
+    "dist/index.js",
+    "dist/index.d.ts",
     "dist/embed.js",
     "dist/kenteken.woff2",
     "README.md",

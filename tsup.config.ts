@@ -1,14 +1,28 @@
 import { defineConfig } from 'tsup'
 
-export default defineConfig({
-  entry: { embed: 'src/embed.ts' },
-  format: ['iife'],
-  platform: 'browser',
-  target: 'es2020',
+const shared = {
+  platform: 'browser' as const,
+  target: 'es2020' as const,
   minify: true,
   treeshake: true,
-  clean: true,
   sourcemap: true,
   outDir: 'dist',
-  outExtension: () => ({ js: '.js' }),
-})
+}
+
+export default defineConfig([
+  {
+    ...shared,
+    entry: { embed: 'src/embed.ts' },
+    format: ['iife'],
+    clean: true,
+    outExtension: () => ({ js: '.js' }),
+  },
+  {
+    ...shared,
+    entry: { index: 'src/index.ts' },
+    format: ['esm'],
+    clean: false,
+    dts: true,
+    outExtension: () => ({ js: '.js' }),
+  },
+])

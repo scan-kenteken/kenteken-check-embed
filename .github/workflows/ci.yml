@@ -112,6 +112,11 @@ jobs:
             --content-type "application/javascript; charset=utf-8" \
             --cache-control "public, max-age=3600"
 
+          aws s3 cp dist/index.js "s3://${R2_BUCKET}/${PREFIX}/index.js" \
+            --endpoint-url "$ENDPOINT" \
+            --content-type "application/javascript; charset=utf-8" \
+            --cache-control "public, max-age=3600"
+
           aws s3 cp dist/kenteken.woff2 "s3://${R2_BUCKET}/${PREFIX}/kenteken.woff2" \
             --endpoint-url "$ENDPOINT" \
             --content-type "font/woff2" \
