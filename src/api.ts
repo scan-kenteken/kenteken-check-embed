@@ -1,9 +1,8 @@
-import type { FetchError, FetchResult, VehicleResponse } from './types'
+import { API_BASE, type FetchError, type FetchResult, type VehicleResponse } from './types'
 import { isValidPlate, normalizePlate } from './format'
 
-export function vehicleUrl(apiBase: string, plate: string): string {
-  const norm = normalizePlate(plate)
-  return `${apiBase.replace(/\/$/, '')}/api/vehicles/${encodeURIComponent(norm)}`
+export function vehicleUrl(plate: string): string {
+  return `${API_BASE}/api/vehicles/${encodeURIComponent(normalizePlate(plate))}`
 }
 
 function apiErrorMessage(status: number, body?: string): FetchError {
@@ -33,11 +32,7 @@ async function readApiError(response: Response): Promise<FetchError> {
   }
 }
 
-export async function fetchVehicle(
-  apiBase: string,
-  plate: string,
-  signal?: AbortSignal,
-): Promise<FetchResult> {
+export async function fetchVehicle(plate: string, signal?: AbortSignal): Promise<FetchResult> {
   const norm = normalizePlate(plate)
   if (!isValidPlate(norm)) {
     const incomplete = norm.length < 6
@@ -52,7 +47,7 @@ export async function fetchVehicle(
 
   let response: Response
   try {
-    response = await fetch(vehicleUrl(apiBase, norm), { signal })
+    response = await fetch(vehicleUrl(norm), { signal })
   } catch (error) {
     if (error instanceof DOMException && error.name === 'AbortError') {
       throw error

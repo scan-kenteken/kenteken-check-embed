@@ -7,32 +7,3 @@ export function createEuStrip(): HTMLElement {
   eu.innerHTML = `${EU_STARS}<span class="plate-country">NL</span>`
   return eu
 }
-
-export function createPlateFlow(value: string): HTMLElement {
-  const flow = document.createElement('char-flow')
-  flow.className = 'plate-flow'
-  flow.setAttribute('preset', 'plate')
-  flow.setAttribute('value', value)
-  flow.style.color = '#1a2028'
-  return flow
-}
-
-export function createPlateDisplay(displayPlate: string, href?: string): HTMLElement {
-  const plate = document.createElement(href ? 'a' : 'div')
-  plate.className = 'plate plate-display plate-yellow plate-chip'
-  if (href) {
-    const link = plate as HTMLAnchorElement
-    link.href = href
-    link.rel = 'noopener noreferrer'
-    link.target = '_blank'
-    link.setAttribute('aria-label', `Kenteken ${displayPlate} op ScanKenteken`)
-    plate.classList.add('plate-link')
-  }
-
-  const text = document.createElement('div')
-  text.className = 'plate-text'
-  text.append(createPlateFlow(displayPlate))
-
-  plate.append(createEuStrip(), text)
-  return plate
-}

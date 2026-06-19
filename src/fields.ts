@@ -2,18 +2,6 @@ import { formatApkInfo, formatCurrency, formatDate, formatEuroClass } from './fo
 import type { Field, FieldRow, VehicleResponse } from './types'
 import { FIELD_LABELS } from './types'
 
-function readZeZone(data: VehicleResponse): string | null {
-  const raw = data.ze_zone ?? data.ze
-  if (typeof raw === 'string' && raw.trim()) return raw.trim()
-  if (raw && typeof raw === 'object') {
-    const label = raw.label ?? raw.status
-    if (label?.trim()) return label.trim()
-  }
-  const vehicleZe = (data.vehicle as Record<string, unknown> | undefined)?.ze_zone
-  if (typeof vehicleZe === 'string' && vehicleZe.trim()) return vehicleZe.trim()
-  return null
-}
-
 function readBrand(data: VehicleResponse): string | null {
   const merk = data.vehicle?.merk?.trim()
   const model = data.vehicle?.model?.trim()
@@ -50,11 +38,6 @@ const FIELD_READERS: Record<Field, FieldReader> = {
   apk: (data) => readApk(data),
   price: (data) => ({ value: readPrice(data) }),
   euro: (data) => ({ value: readEuro(data) }),
-  ze: (data) => ({ value: readZeZone(data) }),
-}
-
-export function extractFieldValue(field: Field, data: VehicleResponse): string | null {
-  return FIELD_READERS[field](data).value
 }
 
 export function buildFieldRows(fields: Field[], data: VehicleResponse): FieldRow[] {
@@ -63,9 +46,4 @@ export function buildFieldRows(fields: Field[], data: VehicleResponse): FieldRow
     label: FIELD_LABELS[key],
     ...FIELD_READERS[key](data),
   }))
-}
-
-export function visibleRows(rows: FieldRow[], layout: 'compact' | 'card'): FieldRow[] {
-  if (layout === 'card') return rows
-  return rows.filter((row) => row.value !== null)
 }

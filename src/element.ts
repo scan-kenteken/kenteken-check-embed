@@ -1,41 +1,28 @@
 import { fetchVehicle } from './api'
 import { readConfig } from './config'
-import { buildFieldRows, visibleRows } from './fields'
+import { buildFieldRows } from './fields'
 import { formatPlateDisplay, formatPlateInput, normalizePlate } from './format'
 import { getEmbedAssetBase, kentekenFontFace } from './font'
-import { createEuStrip, createPlateDisplay } from './plate'
+import { createEuStrip } from './plate'
 import { createApkIcon, createSearchButton } from './icons'
 import { buildStyles } from './styles'
 import type { FetchError, VehicleResponse, WidgetConfig } from './types'
 
 const TAG = 'kenteken-check'
 const MAX_PLATE_LEN = 6
+const SITE_URL = 'https://www.scankenteken.nl/?utm_source=embed'
 
 export class KentekenCheckElement extends HTMLElement {
-  static observedAttributes = [
-    'preset',
-    'fields',
-    'layout',
-    'theme',
-    'plate',
-    'show-input',
-    'link-out',
-    'attribution',
-    'api-base',
-  ] as const
+  static observedAttributes = ['fields', 'theme', 'plate', 'link-out'] as const
 
   #config!: WidgetConfig
   #shell!: HTMLElement
-  #form!: HTMLFormElement
   #input!: HTMLInputElement
   #submit!: HTMLButtonElement
-  #plateLabel!: HTMLLabelElement
   #status!: HTMLParagraphElement
-  #plateDisplay!: HTMLElement
   #results!: HTMLElement
-  #footer!: HTMLElement
   #currentPlate: string | null = null
-  #cache: { plate: string; apiBase: string; data: VehicleResponse } | null = null
+  #cache: { plate: string; data: VehicleResponse } | null = null
   #abort: AbortController | null = null
   #requestId = 0
   #themeQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -53,11 +40,11 @@ export class KentekenCheckElement extends HTMLElement {
       this.#shell = document.createElement('div')
       this.#shell.className = 'shell'
 
-      this.#form = document.createElement('form')
-      this.#form.setAttribute('part', 'form')
+      const form = document.createElement('form')
+      form.setAttribute('part', 'form')
 
-      this.#plateLabel = document.createElement('label')
-      this.#plateLabel.className = 'plate plate-input plate-yellow'
+      const plateLabel = document.createElement('label')
+      plateLabel.className = 'plate plate-input plate-yellow'
 
       this.#input = document.createElement('input')
       this.#input.type = 'text'
@@ -71,10 +58,9 @@ export class KentekenCheckElement extends HTMLElement {
 
       this.#submit = createSearchButton()
 
-      this.#plateLabel.append(createEuStrip(), this.#input, this.#submit)
-
-      this.#form.append(this.#plateLabel)
-      this.#form.addEventListener('submit', (event) => {
+      plateLabel.append(createEuStrip(), this.#input, this.#submit)
+      form.append(plateLabel)
+      form.addEventListener('submit', (event) => {
         event.preventDefault()
         void this.#lookup(this.#input.value)
       })
@@ -87,19 +73,15 @@ export class KentekenCheckElement extends HTMLElement {
       this.#status.className = 'status'
       this.#status.hidden = true
 
-      this.#plateDisplay = document.createElement('div')
-      this.#plateDisplay.className = 'plate-wrap'
-      this.#plateDisplay.hidden = true
-
       this.#results = document.createElement('div')
       this.#results.className = 'results'
       this.#results.hidden = true
 
-      this.#footer = document.createElement('p')
-      this.#footer.className = 'footer'
-      this.#footer.hidden = true
+      const footer = document.createElement('p')
+      footer.className = 'footer'
+      footer.innerHTML = `Kentekencheck via <a href="${SITE_URL}" rel="noopener noreferrer" target="_blank">ScanKenteken</a> (RDW-data)`
 
-      this.#shell.append(this.#form, this.#status, this.#plateDisplay, this.#results, this.#footer)
+      this.#shell.append(form, this.#status, this.#results, footer)
       root.append(style, this.#shell)
     }
 
@@ -124,10 +106,6 @@ export class KentekenCheckElement extends HTMLElement {
   #sync(): void {
     this.#config = readConfig(this)
     this.#applyTheme()
-    this.#shell.dataset.layout = this.#config.layout
-    this.#form.hidden = !this.#config.showInput
-    this.#footer.hidden = !this.#config.attribution
-    this.#updateFooter()
 
     if (!this.#config.plate) {
       this.#clearResults()
@@ -137,11 +115,7 @@ export class KentekenCheckElement extends HTMLElement {
     const normPlate = normalizePlate(this.#config.plate)
     this.#setPlateInput(this.#config.plate)
 
-    if (
-      this.#cache &&
-      this.#cache.plate === normPlate &&
-      this.#cache.apiBase === this.#config.apiBase
-    ) {
+    if (this.#cache && this.#cache.plate === normPlate) {
       this.#renderSuccess(this.#cache.data, normPlate)
       return
     }
@@ -188,14 +162,12 @@ export class KentekenCheckElement extends HTMLElement {
     this.#setLoading(true)
     this.#showStatus('Gegevens ophalen…', 'loading')
 
-    const result = await fetchVehicle(this.#config.apiBase, plate, this.#abort.signal).catch(
-      (error: unknown) => {
-        if (error instanceof DOMException && error.name === 'AbortError') {
-          return null
-        }
-        throw error
-      },
-    )
+    const result = await fetchVehicle(plate, this.#abort.signal).catch((error: unknown) => {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return null
+      }
+      throw error
+    })
     if (result === null || requestId !== this.#requestId) return
 
     this.#setLoading(false)
@@ -217,7 +189,6 @@ export class KentekenCheckElement extends HTMLElement {
     this.#status.hidden = false
     this.#status.dataset.kind = kind
     this.#status.textContent = message
-    this.#plateDisplay.hidden = true
     this.#results.hidden = true
   }
 
@@ -227,37 +198,21 @@ export class KentekenCheckElement extends HTMLElement {
 
   #clearResults(): void {
     this.#status.hidden = true
-    this.#plateDisplay.hidden = true
     this.#results.hidden = true
     this.#results.replaceChildren()
     this.#currentPlate = null
     this.#cache = null
-    this.#updateFooter()
   }
 
   #renderSuccess(data: VehicleResponse, plate: string): void {
-    this.#cache = { plate, apiBase: this.#config.apiBase, data }
+    this.#cache = { plate, data }
     this.#status.hidden = true
 
     const displayPlate = formatPlateDisplay(data.kenteken_norm ?? plate)
     this.#currentPlate = displayPlate
-    this.#updateFooter()
-    if (this.#config.showInput) {
-      this.#plateDisplay.hidden = true
-      this.#plateDisplay.replaceChildren()
-    } else {
-      this.#renderPlateDisplay(displayPlate)
-      this.#plateDisplay.hidden = false
-    }
 
-    const rows = visibleRows(buildFieldRows(this.#config.fields, data), this.#config.layout)
+    const rows = buildFieldRows(this.#config.fields, data)
     this.#results.replaceChildren()
-
-    const showLinkRow = this.#config.linkOut && this.#currentPlate
-    if (rows.length === 0 && this.#config.layout === 'compact' && !showLinkRow) {
-      this.#results.hidden = true
-      return
-    }
 
     for (const row of rows) {
       const label = document.createElement('span')
@@ -279,7 +234,7 @@ export class KentekenCheckElement extends HTMLElement {
       this.#results.append(wrap)
     }
 
-    if (showLinkRow) {
+    if (this.#config.linkOut) {
       const linkRow = document.createElement('div')
       linkRow.className = 'more-link-wrap'
       const link = document.createElement('a')
@@ -295,25 +250,9 @@ export class KentekenCheckElement extends HTMLElement {
     this.#results.hidden = false
   }
 
-  #renderPlateDisplay(displayPlate: string): void {
-    this.#plateDisplay.replaceChildren()
-    const href = this.#config.linkOut ? this.#detailUrl(displayPlate) : undefined
-    this.#plateDisplay.append(createPlateDisplay(displayPlate, href))
-  }
-
   #detailUrl(displayPlate: string): string {
     const slug = encodeURIComponent(normalizePlate(displayPlate))
     return `https://www.scankenteken.nl/kenteken/${slug}?utm_source=embed`
-  }
-
-  #updateFooter(): void {
-    if (!this.#config?.attribution) return
-
-    const siteUrl = 'https://www.scankenteken.nl/?utm_source=embed'
-    this.#footer.innerHTML =
-      'Kentekencheck via <a href="' +
-      siteUrl +
-      '" rel="noopener noreferrer" target="_blank">ScanKenteken</a> (RDW-data)'
   }
 }
 

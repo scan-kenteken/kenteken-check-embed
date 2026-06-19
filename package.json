@@ -49,7 +49,6 @@
     "prepack": "npm run typecheck && npm run build"
   },
   "devDependencies": {
-    "char-flow": "^0.1.2",
     "kenteken-kit": "^0.2.4",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3"
