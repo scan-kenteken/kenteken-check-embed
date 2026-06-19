@@ -88,7 +88,7 @@ npm run serve
 
 Open the configurator:
 
-- http://localhost:3000/examples/
+- http://localhost:3000/configurator/
 
 Watch mode:
 
