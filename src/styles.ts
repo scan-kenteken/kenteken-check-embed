@@ -97,7 +97,7 @@ const PLATE_STYLES = `
 }
 
 .plate-input:focus-within {
-  outline: 2px solid #1473f747;
+  outline: 2px solid rgba(18, 98, 223, 0.28);
   outline-offset: 2px;
 }
 `.trim()
@@ -111,12 +111,12 @@ const SHELL_STYLES = `
   font-size: 14px;
   line-height: 1.45;
   color: var(--sk-text);
-  --sk-text: #1a1a1a;
-  --sk-muted: #5c5c5c;
+  --sk-text: #1a1615;
+  --sk-muted: #7a6a5e;
   --sk-bg: #ffffff;
-  --sk-surface: #f7f7f7;
-  --sk-border: #d9d9d9;
-  --sk-accent: #0b57d0;
+  --sk-surface: #faf5f0;
+  --sk-border: rgba(26, 22, 21, 0.14);
+  --sk-accent: #1262df;
   --sk-error: #b3261e;
   --sk-radius: 8px;
 }
