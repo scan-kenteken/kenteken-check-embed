@@ -17,10 +17,9 @@ Lightweight embed widget for inline kentekenchecks on any website. A vanilla Typ
 
 | Attribute | Default | Values |
 |---|---|---|
-| `fields` | `brand,apk` | comma-separated: `brand`, `apk`, `price`, `euro` |
+| `fields` | `brand,apk,link` | comma-separated: `brand`, `apk`, `price`, `euro`, `link` |
 | `theme` | `auto` | `light`, `dark`, `auto` |
 | `plate` | — | pre-fill and auto-lookup, e.g. `RJ-123-X` |
-| `link-out` | `true` | link results to the ScanKenteken detail page |
 
 ## Examples
 

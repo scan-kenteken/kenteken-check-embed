@@ -1,7 +1,7 @@
 import type { Field, Theme, WidgetConfig } from './types'
 import { DEFAULT_FIELDS } from './types'
 
-const FIELDS = new Set<Field>(['brand', 'apk', 'price', 'euro'])
+const FIELDS = new Set<Field>(['brand', 'apk', 'price', 'euro', 'link'])
 const THEMES = new Set<Theme>(['light', 'dark', 'auto'])
 
 function parseBool(value: string | null, fallback: boolean): boolean {
@@ -27,10 +27,16 @@ function parseTheme(value: string | null): Theme {
 }
 
 export function readConfig(el: HTMLElement): WidgetConfig {
+  let fields = parseFields(el.getAttribute('fields'))
+  const linkOutAttr = el.getAttribute('link-out')
+  if (linkOutAttr !== null) {
+    const wantsLink = parseBool(linkOutAttr, true)
+    if (wantsLink && !fields.includes('link')) fields = [...fields, 'link']
+    if (!wantsLink) fields = fields.filter((field) => field !== 'link')
+  }
   return {
-    fields: parseFields(el.getAttribute('fields')),
+    fields,
     theme: parseTheme(el.getAttribute('theme')),
     plate: (el.getAttribute('plate') ?? '').trim(),
-    linkOut: parseBool(el.getAttribute('link-out'), true),
   }
 }

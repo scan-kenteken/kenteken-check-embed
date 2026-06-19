@@ -234,7 +234,7 @@ export class KentekenCheckElement extends HTMLElement {
       this.#results.append(wrap)
     }
 
-    if (this.#config.linkOut) {
+    if (this.#config.fields.includes('link')) {
       const linkRow = document.createElement('div')
       linkRow.className = 'more-link-wrap'
       const link = document.createElement('a')

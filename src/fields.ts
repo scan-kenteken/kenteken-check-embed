@@ -41,9 +41,11 @@ const FIELD_READERS: Record<Field, FieldReader> = {
 }
 
 export function buildFieldRows(fields: Field[], data: VehicleResponse): FieldRow[] {
-  return fields.map((key) => ({
-    key,
-    label: FIELD_LABELS[key],
-    ...FIELD_READERS[key](data),
-  }))
+  return fields
+    .filter((key) => key !== 'link')
+    .map((key) => ({
+      key,
+      label: FIELD_LABELS[key],
+      ...FIELD_READERS[key](data),
+    }))
 }

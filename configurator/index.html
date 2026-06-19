@@ -72,26 +72,8 @@
       }
 
       .fields input,
-      .theme-options input,
-      .options input {
+      .theme-options input {
         margin: 0;
-      }
-
-      .options {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid #eee;
-      }
-
-      .options label {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        cursor: pointer;
-        font-size: 0.9375rem;
       }
 
       .theme-options {
@@ -203,10 +185,8 @@
             <input type="checkbox" name="field" value="euro" />
             Euroklasse
           </label>
-        </div>
-        <div class="options" id="link-options">
           <label>
-            <input type="checkbox" id="link-out" checked />
+            <input type="checkbox" name="field" value="link" checked />
             Link naar meer details
           </label>
         </div>
@@ -227,7 +207,7 @@
     <section class="preview">
       <h2>Voorbeeld</h2>
       <div class="preview-box" id="preview-box">
-        <kenteken-check id="preview" fields="brand,apk" theme="light" plate="G-123-BB" link-out="true"></kenteken-check>
+        <kenteken-check id="preview" fields="brand,apk,link" theme="light" plate="G-123-BB"></kenteken-check>
       </div>
     </section>
 
@@ -245,7 +225,6 @@
       const DEFAULT_PLATE = 'G-123-BB'
       const fieldOptions = document.getElementById('field-options')
       const themeOptions = document.getElementById('theme-options')
-      const linkOutOption = document.getElementById('link-out')
       const preview = document.getElementById('preview')
       const previewBox = document.getElementById('preview-box')
       const embedCode = document.getElementById('embed-code')
@@ -260,22 +239,17 @@
         return checked ? checked.value : 'light'
       }
 
-      function linkOutEnabled() {
-        return linkOutOption.checked
-      }
-
-      function buildEmbedSnippet(fields, theme, linkOut) {
+      function buildEmbedSnippet(fields, theme) {
         const script = `<script async src="${CDN_URL}"><\/script>`
         const attrs = []
         if (fields.length > 0) attrs.push(`fields="${fields.join(',')}"`)
         attrs.push(`theme="${theme}"`)
         attrs.push(`plate="${DEFAULT_PLATE}"`)
-        if (!linkOut) attrs.push('link-out="false"')
         const tag = `<kenteken-check ${attrs.join(' ')}></kenteken-check>`
         return `${script}\n${tag}`
       }
 
-      function updatePreview(fields, theme, linkOut) {
+      function updatePreview(fields, theme) {
         if (fields.length === 0) {
           preview.remove()
           if (!previewBox.querySelector('.empty-hint')) {
@@ -297,20 +271,17 @@
         preview.setAttribute('fields', fields.join(','))
         preview.setAttribute('theme', theme)
         preview.setAttribute('plate', DEFAULT_PLATE)
-        preview.setAttribute('link-out', linkOut ? 'true' : 'false')
       }
 
       function sync() {
         const fields = selectedFields()
         const theme = selectedTheme()
-        const linkOut = linkOutEnabled()
-        updatePreview(fields, theme, linkOut)
-        embedCode.textContent = buildEmbedSnippet(fields, theme, linkOut)
+        updatePreview(fields, theme)
+        embedCode.textContent = buildEmbedSnippet(fields, theme)
       }
 
       fieldOptions.addEventListener('change', sync)
       themeOptions.addEventListener('change', sync)
-      linkOutOption.addEventListener('change', sync)
 
       copyBtn.addEventListener('click', async () => {
         const text = embedCode.textContent

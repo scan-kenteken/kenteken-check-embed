@@ -1,11 +1,10 @@
-export type Field = 'brand' | 'apk' | 'price' | 'euro'
+export type Field = 'brand' | 'apk' | 'price' | 'euro' | 'link'
 export type Theme = 'light' | 'dark' | 'auto'
 
 export interface WidgetConfig {
   fields: Field[]
   theme: Theme
   plate: string
-  linkOut: boolean
 }
 
 export interface FuelEntry {
@@ -46,13 +45,14 @@ export interface FieldRow {
   apkValid?: boolean
 }
 
-export const DEFAULT_FIELDS: Field[] = ['brand', 'apk']
+export const DEFAULT_FIELDS: Field[] = ['brand', 'apk', 'link']
 
 export const FIELD_LABELS: Record<Field, string> = {
   brand: 'Merk & model',
   apk: 'APK vervaldatum',
   price: 'Catalogusprijs',
   euro: 'Euroklasse',
+  link: 'Link naar meer details',
 }
 
 export const API_BASE = 'https://api.scankenteken.nl'
