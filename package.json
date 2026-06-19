@@ -54,8 +54,7 @@
     "build": "tsup && node scripts/build-font.mjs",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "serve": "npx --yes serve . -p 3000",
-    "prepack": "npm run typecheck && npm run build"
+    "serve": "npx --yes serve . -p 3000"
   },
   "devDependencies": {
     "kenteken-kit": "^0.2.4",

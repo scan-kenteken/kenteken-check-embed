@@ -5,3 +5,4 @@ fonts/kenteken.woff
 *.log
 .DS_Store
 .env
+AGENTS.local.md
