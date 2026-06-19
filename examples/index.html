@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kenteken Check — configurator</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 2rem 1rem 3rem;
+        color: #1a1a1a;
+      }
+
+      h1 {
+        font-size: 1.375rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem;
+      }
+
+      .intro {
+        margin: 0 0 1.5rem;
+        color: #444;
+      }
+
+      section + section {
+        margin-top: 2rem;
+      }
+
+      h2 {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #666;
+        margin: 0 0 0.75rem;
+      }
+
+      fieldset {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin: 0;
+        padding: 0.75rem 1rem 1rem;
+      }
+
+      legend {
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0 0.25rem;
+      }
+
+      .fields {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .fields label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9375rem;
+      }
+
+      .fields input,
+      .theme-options input,
+      .options input {
+        margin: 0;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+
+      .options label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9375rem;
+      }
+
+      .theme-options {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem 1rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+      }
+
+      .theme-options .theme-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-right: 0.25rem;
+      }
+
+      .theme-options label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9375rem;
+      }
+
+      .preview-box {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 1rem;
+        background: #fafafa;
+      }
+
+      .embed-wrap {
+        position: relative;
+      }
+
+      pre {
+        margin: 0;
+        padding: 0.875rem 1rem;
+        background: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-size: 0.8125rem;
+        line-height: 1.6;
+      }
+
+      code {
+        font-family: ui-monospace, monospace;
+        white-space: pre;
+      }
+
+      .copy-btn {
+        margin-top: 0.75rem;
+        font: inherit;
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background: #fff;
+        cursor: pointer;
+      }
+
+      .copy-btn:hover {
+        background: #f0f0f0;
+      }
+
+      .copy-btn:active {
+        background: #e8e8e8;
+      }
+
+      .hint {
+        margin: 0.75rem 0 0;
+        font-size: 0.8125rem;
+        color: #888;
+      }
+
+      .empty-hint {
+        margin: 0;
+        font-size: 0.875rem;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Kenteken Check configurator</h1>
+    <p class="intro">
+      Kies welke velden zichtbaar zijn, bekijk het resultaat en kopieer de embed code.
+    </p>
+
+    <section class="config">
+      <fieldset>
+        <legend>Zichtbare velden</legend>
+        <div class="fields" id="field-options">
+          <label>
+            <input type="checkbox" name="field" value="brand" checked />
+            Merk &amp; model
+          </label>
+          <label>
+            <input type="checkbox" name="field" value="apk" checked />
+            APK vervaldatum
+          </label>
+          <label>
+            <input type="checkbox" name="field" value="price" />
+            Catalogusprijs
+          </label>
+          <label>
+            <input type="checkbox" name="field" value="euro" />
+            Euroklasse
+          </label>
+        </div>
+        <div class="options" id="link-options">
+          <label>
+            <input type="checkbox" id="link-out" checked />
+            Link naar meer details
+          </label>
+        </div>
+        <div class="theme-options" id="theme-options">
+          <span class="theme-label">Thema</span>
+          <label>
+            <input type="radio" name="theme" value="light" checked />
+            Licht
+          </label>
+          <label>
+            <input type="radio" name="theme" value="dark" />
+            Donker
+          </label>
+        </div>
+      </fieldset>
+    </section>
+
+    <section class="preview">
+      <h2>Voorbeeld</h2>
+      <div class="preview-box" id="preview-box">
+        <kenteken-check id="preview" fields="brand,apk" theme="light" plate="G-123-BB" link-out="true"></kenteken-check>
+      </div>
+    </section>
+
+    <section class="embed">
+      <h2>Embed code</h2>
+      <div class="embed-wrap">
+        <pre><code id="embed-code"></code></pre>
+        <button type="button" class="copy-btn" id="copy-btn">Kopieer code</button>
+      </div>
+    </section>
+
+    <script async src="../dist/embed.js"></script>
+    <script>
+      const CDN_URL = 'https://cdn.scankenteken.nl/kenteken-check/v1/embed.js'
+      const DEFAULT_PLATE = 'G-123-BB'
+      const fieldOptions = document.getElementById('field-options')
+      const themeOptions = document.getElementById('theme-options')
+      const linkOutOption = document.getElementById('link-out')
+      const preview = document.getElementById('preview')
+      const previewBox = document.getElementById('preview-box')
+      const embedCode = document.getElementById('embed-code')
+      const copyBtn = document.getElementById('copy-btn')
+
+      function selectedFields() {
+        return [...fieldOptions.querySelectorAll('input:checked')].map((el) => el.value)
+      }
+
+      function selectedTheme() {
+        const checked = themeOptions.querySelector('input:checked')
+        return checked ? checked.value : 'light'
+      }
+
+      function linkOutEnabled() {
+        return linkOutOption.checked
+      }
+
+      function buildEmbedSnippet(fields, theme, linkOut) {
+        const script = `<script async src="${CDN_URL}"><\/script>`
+        const attrs = []
+        if (fields.length > 0) attrs.push(`fields="${fields.join(',')}"`)
+        attrs.push(`theme="${theme}"`)
+        attrs.push(`plate="${DEFAULT_PLATE}"`)
+        if (!linkOut) attrs.push('link-out="false"')
+        const tag = `<kenteken-check ${attrs.join(' ')}></kenteken-check>`
+        return `${script}\n${tag}`
+      }
+
+      function updatePreview(fields, theme, linkOut) {
+        if (fields.length === 0) {
+          preview.remove()
+          if (!previewBox.querySelector('.empty-hint')) {
+            const hint = document.createElement('p')
+            hint.className = 'empty-hint'
+            hint.textContent = 'Selecteer minimaal één veld om een voorbeeld te zien.'
+            previewBox.append(hint)
+          }
+          return
+        }
+
+        const emptyHint = previewBox.querySelector('.empty-hint')
+        if (emptyHint) emptyHint.remove()
+
+        if (!preview.isConnected) {
+          previewBox.append(preview)
+        }
+
+        preview.setAttribute('fields', fields.join(','))
+        preview.setAttribute('theme', theme)
+        preview.setAttribute('plate', DEFAULT_PLATE)
+        preview.setAttribute('link-out', linkOut ? 'true' : 'false')
+      }
+
+      function sync() {
+        const fields = selectedFields()
+        const theme = selectedTheme()
+        const linkOut = linkOutEnabled()
+        updatePreview(fields, theme, linkOut)
+        embedCode.textContent = buildEmbedSnippet(fields, theme, linkOut)
+      }
+
+      fieldOptions.addEventListener('change', sync)
+      themeOptions.addEventListener('change', sync)
+      linkOutOption.addEventListener('change', sync)
+
+      copyBtn.addEventListener('click', async () => {
+        const text = embedCode.textContent
+        try {
+          await navigator.clipboard.writeText(text)
+          copyBtn.textContent = 'Gekopieerd'
+          setTimeout(() => {
+            copyBtn.textContent = 'Kopieer code'
+          }, 1500)
+        } catch {
+          copyBtn.textContent = 'Kopiëren mislukt'
+          setTimeout(() => {
+            copyBtn.textContent = 'Kopieer code'
+          }, 1500)
+        }
+      })
+
+      sync()
+    </script>
+  </body>
+</html>

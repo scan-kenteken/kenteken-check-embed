@@ -1,0 +1,57 @@
+{
+  "name": "kenteken-check-embed",
+  "version": "1.0.0",
+  "description": "Lightweight ScanKenteken embed widget — inline kentekencheck for any website",
+  "type": "module",
+  "license": "MIT",
+  "author": "scankenteken",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scan-kenteken/kenteken-check-embed.git"
+  },
+  "homepage": "https://github.com/scan-kenteken/kenteken-check-embed#readme",
+  "keywords": [
+    "kenteken",
+    "license-plate",
+    "embed",
+    "web-component",
+    "custom-element",
+    "rdw",
+    "scankenteken"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "./dist/embed.js",
+  "exports": {
+    ".": "./dist/embed.js",
+    "./embed.js": "./dist/embed.js",
+    "./kenteken.woff2": "./dist/kenteken.woff2"
+  },
+  "unpkg": "./dist/embed.js",
+  "jsdelivr": "./dist/embed.js",
+  "sideEffects": [
+    "./dist/embed.js"
+  ],
+  "files": [
+    "dist/embed.js",
+    "dist/kenteken.woff2",
+    "README.md",
+    "LICENSE",
+    "fonts/FONT-LICENSE.txt"
+  ],
+  "scripts": {
+    "clean": "node -e \"import('node:fs').then(fs => fs.rmSync('dist', { recursive: true, force: true }))\"",
+    "build": "tsup && node scripts/build-font.mjs",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "serve": "npx --yes serve . -p 3000",
+    "prepack": "npm run typecheck && npm run build"
+  },
+  "devDependencies": {
+    "char-flow": "^0.1.2",
+    "kenteken-kit": "^0.2.4",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  }
+}

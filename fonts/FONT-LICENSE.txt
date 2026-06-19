@@ -1,0 +1,8 @@
+Kenteken Smits 2013
+Copyright (c) 2013 by LeFly (Arthur LeFly)
+
+Licensed under Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
+https://creativecommons.org/licenses/by-sa/3.0/
+
+The widget ships a subset WOFF2 built from Kenteken Smits 2013.otf for
+A-Z, 0-9, hyphen, and space only.
