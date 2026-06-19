@@ -1,6 +1,6 @@
 # Kenteken Check
 
-Lightweight embed widget for inline kentekenchecks on any website. A vanilla TypeScript custom element with Shadow DOM — no framework, iframe, or scanner required.
+Lightweight embed widget for inline kentekenchecks on any website. Shows public vehicle details from the Dutch RDW vehicle register — merk, model, APK date, and more. A vanilla TypeScript custom element with Shadow DOM — no framework, iframe, or scanner required.
 
 **Configure fields, theme, and copy embed code:** [scankenteken.nl/kenteken-check-embed](https://www.scankenteken.nl/kenteken-check-embed)
 
@@ -59,7 +59,9 @@ npm run dev
 
 ## Data source
 
-Vehicle data is fetched from `https://api.scankenteken.nl/api/vehicles/:plate`. Rate limiting and caching are handled server-side.
+Vehicle data comes from the public [RDW](https://www.rdw.nl/) (Rijksdienst voor het Wegverkeer) open vehicle register. The widget fetches it via `https://api.scankenteken.nl/api/vehicles/:plate`. Rate limiting and caching are handled server-side.
+
+ScanKenteken is not part of the RDW. No personal owner data is shown.
 
 ## License
 

@@ -1,7 +1,7 @@
 {
   "name": "kenteken-check-embed",
   "version": "1.0.0",
-  "description": "Lightweight ScanKenteken embed widget — inline kentekencheck for any website",
+  "description": "Lightweight ScanKenteken embed widget — inline kentekencheck with RDW vehicle data for any website",
   "type": "module",
   "license": "MIT",
   "author": "scankenteken",
