@@ -19,6 +19,13 @@ function readApk(data: VehicleResponse): Pick<FieldRow, 'value' | 'apkValid'> {
   return { value: info.display, apkValid: info.valid }
 }
 
+function readYear(data: VehicleResponse): string | null {
+  const date = data.vehicle?.datum_eerste_toelating
+  if (!date) return null
+  const year = date.slice(0, 4)
+  return /^\d{4}$/.test(year) ? year : null
+}
+
 function readPrice(data: VehicleResponse): string | null {
   const price = data.vehicle?.catalogusprijs
   if (price == null || Number.isNaN(price)) return null
@@ -38,6 +45,7 @@ type FieldReader = (data: VehicleResponse) => Pick<FieldRow, 'value' | 'apkValid
 const FIELD_READERS: Record<DataField, FieldReader> = {
   brand: (data) => ({ value: readBrand(data) }),
   apk: (data) => readApk(data),
+  year: (data) => ({ value: readYear(data) }),
   price: (data) => ({ value: readPrice(data) }),
   euro: (data) => ({ value: readEuro(data) }),
 }

@@ -1,7 +1,7 @@
 import type { Field, Theme, WidgetConfig } from './types'
 import { DEFAULT_FIELDS } from './types'
 
-const FIELDS = new Set<Field>(['brand', 'apk', 'price', 'euro', 'link'])
+const FIELDS = new Set<Field>(['brand', 'apk', 'year', 'price', 'euro', 'link'])
 const THEMES = new Set<Theme>(['light', 'dark', 'auto'])
 
 function parseBool(value: string | null, fallback: boolean): boolean {

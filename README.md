@@ -19,16 +19,16 @@ Lightweight embed widget for inline kentekenchecks on any website. Shows public 
 
 | Attribute | Default | Values |
 |---|---|---|
-| `fields` | `brand,apk,link` | comma-separated: `brand`, `apk`, `price`, `euro`, `link` |
+| `fields` | `brand,apk,link` | comma-separated: `brand`, `apk`, `year`, `price`, `euro`, `link` |
 | `theme` | `auto` | `light`, `dark`, `auto` |
 | `plate` | — | pre-fill and auto-lookup, e.g. `RJ-123-X` |
 
 ## Examples
 
-Show price alongside brand and APK:
+Show bouwjaar and price alongside brand and APK:
 
 ```html
-<kenteken-check fields="brand,apk,price"></kenteken-check>
+<kenteken-check fields="brand,apk,year,price"></kenteken-check>
 ```
 
 Pre-filled, dark theme:

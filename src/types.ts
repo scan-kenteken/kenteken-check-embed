@@ -1,4 +1,4 @@
-export type Field = 'brand' | 'apk' | 'price' | 'euro' | 'link'
+export type Field = 'brand' | 'apk' | 'year' | 'price' | 'euro' | 'link'
 export type Theme = 'light' | 'dark' | 'auto'
 
 export interface WidgetConfig {
@@ -17,6 +17,7 @@ export interface VehiclePayload {
   merk?: string
   model?: string
   vervaldatum_apk?: string
+  datum_eerste_toelating?: string
   catalogusprijs?: number
   voertuigsoort?: string
 }
@@ -50,6 +51,7 @@ export const DEFAULT_FIELDS: Field[] = ['brand', 'apk', 'link']
 export const FIELD_LABELS: Record<Field, string> = {
   brand: 'Merk & model',
   apk: 'APK vervaldatum',
+  year: 'Bouwjaar',
   price: 'Catalogusprijs',
   euro: 'Euroklasse',
   link: 'Link naar meer details',
