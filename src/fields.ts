@@ -31,9 +31,11 @@ function readEuro(data: VehicleResponse): string | null {
   return formatEuroClass(euro)
 }
 
+type DataField = Exclude<Field, 'link'>
+
 type FieldReader = (data: VehicleResponse) => Pick<FieldRow, 'value' | 'apkValid'>
 
-const FIELD_READERS: Record<Field, FieldReader> = {
+const FIELD_READERS: Record<DataField, FieldReader> = {
   brand: (data) => ({ value: readBrand(data) }),
   apk: (data) => readApk(data),
   price: (data) => ({ value: readPrice(data) }),
